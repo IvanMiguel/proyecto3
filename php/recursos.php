@@ -1,25 +1,13 @@
 <?php
 
-		//realizamos la conexión
-		$conexion = mysqli_connect('localhost', 'root', '', 'bd_proyecto2');
-
-		//le decimos a la conexión que los datos los devuelva diréctamente en utf8, así no hay que usar htmlentities
-		$acentos = mysqli_query($conexion, "SET NAMES 'utf8'");
-
-		if (!$conexion) {
-		    echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
-		    echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
-		    echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
-		    exit;
-		}
-
+		
 		session_start();
-		$mysqli = new mysqli("localhost", "root", "", "bd_proyecto2");
-		//Cogemos el nombre de usuario y la imagen de forma dinámica en la BD
+			//incluimos la funcionalidad de conexión de php
+		require_once('conexion.php');
 		$con =	"SELECT * FROM `tbl_usuario` WHERE `usu_id` = '". $_SESSION["usu_id"] ."'";
 		//echo $con;
 		//Lanzamos la consulta a la BD
-		$result	=	mysqli_query($mysqli,$con);
+		$result	=	mysqli_query($conexion,$con);
 		while ($fila = mysqli_fetch_row($result)) 
 			{
 				$usu_nickname	=	$fila[1];
@@ -55,6 +43,9 @@
 	<link rel="stylesheet" type="text/css" href="../css/recursos.css">
 	<title>Recursos</title>
 	<script type="text/javascript">
+		function mostrar(){
+			return true;
+		}
 		function destroy(){
 			var respuesta = confirm("¿Está seguro que desea reservar este recurso?");
 			if(respuesta){
@@ -108,6 +99,12 @@
 <div class="container">
 	
 	<?php
+	if(isset($err_recu))
+		{
+			echo "<div class='content error'>
+				No has podido reservar el recurso
+				</div>";
+		}
 	if(mysqli_num_rows($tipos)>0){
 		?>
 	<form action="recursos.php" method="get" class="formtipo">
@@ -145,12 +142,24 @@
 										echo "</tr>";
 										echo "<tr>";
 														
-												echo "<td colspan='2'> <a href='recursos.proc.php?rec_id=".$recurso['rec_id']."' onclick='return destroy();'>RESERVAR RECURSO </a></td>";
+												echo "<td colspan='2'> <a href='#'' onclick='return mostrar();'>RESERVAR RECURSO </a></td>";
 											
 											echo "</tr>"; 
 											
 														
 									echo "</table>";
+									echo "<form id='reserved' class='reservedf' action=recursos.proc.php?rec_id=".$recurso['rec_id']." method='POST' >";
+										echo "<table border>";
+											echo "<tr><td>Fecha inicial de la reserva</td>";
+											echo "<td> <input type='date' id='fecha_inicial' name='fecha_inicial' maxlength='15'></td></tr>";
+											echo "<tr><td>Seleccione hora inicial</td>";
+											echo "<td> <input type='time' name='hora_inicial' id='hora_inicial'></td>";
+											echo "<tr><td>Fecha final de la reserva</td>";
+											echo "<td> <input type='date' id='fecha_final' name='fecha_final' maxlength='15'></td></tr>";
+											echo "<tr><td>Seleccione hora final</td>";
+											echo "<td> <input type='time' name='hora_final' id='hora_final'></td>";
+											echo "<tr><td colspan='2'> <input type='submit' onclick='return rvalidar()' value='reservar'>";
+										echo "</table></form>";
 									echo "</div>";
 									echo "</br>";
 	 

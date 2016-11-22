@@ -1,0 +1,4 @@
+ALTER TABLE `tbl_usuario`
+ADD CONSTRAINT `usuti_tipo`
+ FOREIGN KEY (`usuti_id`)
+ REFERENCES `tbl_tipo_usuario` (`usuti_id`) 

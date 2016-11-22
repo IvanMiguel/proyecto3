@@ -22,12 +22,9 @@
 	extract($_REQUEST);
 
 	//session_start();
-	$mysqli = new mysqli("localhost", "root", "", "bd_proyecto2");
-	$acentos = mysqli_query($mysqli, "SET NAMES 'utf8'");
-
-	$incidencia= "SELECT * FROM tbl_tipoinc";
-
-		$incidencias=mysqli_query($mysqli, $incidencia);
+    	require_once("conexion.php");
+	    $incidencia= "SELECT * FROM tbl_tipoinc";
+		$incidencias=mysqli_query($conexion, $incidencia);
 			
 	?>
 

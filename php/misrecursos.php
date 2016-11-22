@@ -38,15 +38,14 @@
 	</head>
 	<body>
 	<?php
-	//session_start();
-	$mysqli = new mysqli("localhost", "root", "", "bd_proyecto2");
-	$acentos = mysqli_query($mysqli, "SET NAMES 'utf8'");
+		//incluimos la funcionalidad de conexión de php
+		require_once('conexion.php');
 
 	//Cogemos el nombre de usuario y la imagen de forma dinámica en la BD
 	$con =	"SELECT * FROM `tbl_usuario` WHERE `usu_id` = '". $_SESSION["usu_id"] ."'";
 	//echo $con;
 		//Lanzamos la consulta a la BD
-		$result	=	mysqli_query($mysqli,$con);
+		$result	=	mysqli_query($conexion,$con);
 		while ($fila = mysqli_fetch_row($result)) 
 			{
 				$usu_nickname	=	$fila[1];
@@ -83,12 +82,12 @@
 			<p class="reserved"> Tus recursos reservados són:</p> <br/>
 			
 				
-			</div>
+			
 			<?php
 				//Seleccionamos todas las reservas que tiene asignado nuestro usuario
-				$con 	=	"SELECT * FROM `tbl_reserva` WHERE `res_usuarioid` = " . $_SESSION["usu_id"] . " AND `res_fechafinal` IS NULL";
-	
-				$result 	=	mysqli_query($mysqli,$con);
+				$con 	=	"SELECT * FROM `tbl_reserva` WHERE `res_usuarioid` = " . $_SESSION["usu_id"] . " AND time(`res_fechafinal`)>= time(NOW())";
+				//echo $con;die;
+				$result 	=	mysqli_query($conexion,$con);
 
 				while($fila	=	mysqli_fetch_row($result)){
 
@@ -96,7 +95,7 @@
 					//echo $fila[3] . "<br/>";
 						//Seleccionamos los recursos correspodientes a las reservas del usuario
 						$con_rec	=	"SELECT * FROM `tbl_recurso` WHERE `rec_id` = ".$fila[3]."";
-						$result_rec 	=	mysqli_query($mysqli,$con_rec);
+						$result_rec 	=	mysqli_query($conexion,$con_rec);
 						echo "<div class='content_rec'>";
 							while($fila_rec	=	mysqli_fetch_row($result_rec)){
 									//echo $fila[0]
@@ -109,14 +108,14 @@
 										echo "<td>".$fila_rec[3]."</td>";
 									echo "</tr>";
 									echo "<tr>";
-										echo "<td>Fecha de inicio: " . date("d-m-Y",strtotime($fila[1])) . "</td>";
+										echo "<td>Fecha de inicio: " . $fila[1] . "</td>";
 									echo "</tr>";
 									echo "<tr>";
 										if(isset($fila[2])){
-										echo "<td>Fecha de Final: ".date("d-m-Y",strtotime($fila[2]))."</td>";
+										echo "<td>Fecha de Final: ".$fila[2]."</td>";
 									}
 									else{
-										echo "<td>En curso</td>";
+										echo "<td>En curso</td>".$fila[2];
 									}
 									echo "</tr>";
 										//echo $fila[2];
@@ -133,5 +132,6 @@
 				}
 
 			?>
+	</div>
 	</body>
 </html>

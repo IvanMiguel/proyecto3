@@ -4,20 +4,8 @@
 			header("location:../index.php?nolog=2");
 		}
 		//realizamos la conexión
-		$conexion = mysqli_connect('localhost', 'root', '', 'bd_proyecto2');
-
-		//le decimos a la conexión que los datos los devuelva diréctamente en utf8, así no hay que usar htmlentities
-		$acentos = mysqli_query($conexion, "SET NAMES 'utf8'");
-
-		if (!$conexion) {
-		    echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
-		    echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
-		    echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
-		    exit;
-		}
-
+		require_once('conexion.php');
 		//session_start();
-		//$mysqli = new mysqli("localhost", "root", "", "bd_proyecto2");
 		//Cogemos el nombre de usuario y la imagen de forma dinámica en la BD
 		$con =	"SELECT * FROM `tbl_usuario` WHERE `usu_id` = '". $_SESSION["usu_id"] ."'";
 		//echo $con;
@@ -36,7 +24,7 @@
 		$disponible =	" SELECT * FROM tbl_recurso INNER JOIN tbl_tiporecurso ON tbl_tiporecurso.tr_id = tbl_recurso.rec_tipoid WHERE rec_estado='disponible' ";
 
 		$ocupado =	" SELECT * FROM tbl_recurso INNER JOIN tbl_tiporecurso ON tbl_tiporecurso.tr_id = tbl_recurso.rec_tipoid WHERE rec_estado='ocupado' ";
-		$incidencia = " SELECT * FROM tbl_recurso INNER JOIN tbl_tiporecurso ON tbl_tiporecurso.tr_id = tbl_recurso.rec_tipoid INNER JOIN tbl_incidencia ON tbl_incidencia.inc_recursoid = tbl_recurso.rec_id INNER JOIN tbl_tipoinc ON tbl_incidencia.inc_tipinc = tbl_tipoinc.ti_id WHERE rec_estado='incidencia' AND inc_fechafinal IS NULL ";
+		$incidencia = " SELECT * FROM tbl_recurso INNER JOIN tbl_tiporecurso ON tbl_tiporecurso.tr_id = tbl_recurso.rec_tipoid INNER JOIN tbl_incidencia ON tbl_incidencia.inc_recursoid = tbl_recurso.rec_id INNER JOIN tbl_tipoinc ON tbl_incidencia.inc_tipinc = tbl_tipoinc.ti_id WHERE rec_estado='incidencia'";
 
 		extract($_REQUEST);
 
@@ -47,7 +35,7 @@
 		 		$incidencia .=" AND rec_tipoid= '$tr_id'";
 		 	}
 		}
-
+		//echo $incidencia;die;
 		$tipos = mysqli_query($conexion, $sql);
 		$recursos = mysqli_query($conexion, $disponible);
 		$recursos1 = mysqli_query($conexion, $ocupado);
@@ -108,6 +96,7 @@
 		<ul class="topnav">	
 			<li class="li"><a href="#">Administrar recursos</a></li>
 			<li class="li"><a href="administrador_reserva.php">Administrar reservas</a></li>
+			<li class="li"><a href="administrador_usuarios.php">Administrar usuarios</a></li>
 		</ul>
 	</nav>
 <div class="container">
@@ -182,7 +171,6 @@
 										echo "<tr>";
 											echo "<td>Estado: " .$recurso1['rec_estado']. "</td>";
 										echo "</tr>";
-										
 											//echo $fila[2];
 														
 									echo "</table>";

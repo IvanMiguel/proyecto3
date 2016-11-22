@@ -1,15 +1,11 @@
 <?php
 extract($_POST);
-
-//Realizamos la conexión a la BD
-$mysqli = new mysqli("localhost", "root", "", "bd_proyecto2");
-if ($mysqli->connect_errno) {
-    echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
-	}
+//Incluimos la funcionalidad que nos realiza la conexión con la bd
+require_once('conexion.php');
 //Consulta de busqueda del usuario
 	$con =	"SELECT * FROM `tbl_usuario` WHERE `usu_nickname` = '". $name ."' AND `usu_contrasena` = '" . $pass . "'";	
 	//Lanzamos la consulta a la BD
-	$result	=	mysqli_query($mysqli,$con);
+	$result	=	mysqli_query($conexion,$con);
 	//Contamos los resultados que nos devuelve
 	$total  = mysqli_num_rows($result); 
 	//Ponemos el condicional según el nombre de registros que nos devuelva

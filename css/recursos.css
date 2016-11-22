@@ -74,7 +74,6 @@ nav ul.topnav li a:hover {background-color: #555; color: white;}
     background-color: white;
     width: 100%;
     border-radius:1em;
-    height: 100%;
     margin-top: 2%;
     text-align: center;
     font-size: 1em;
@@ -132,4 +131,9 @@ input{
 }
 .invisible{
 	display:none;
+}
+/*Estilos formularios de modificación de usuarios*/
+.div_up-form {
+    display: block;
+    margin-left: 19%;
 }

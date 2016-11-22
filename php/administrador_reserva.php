@@ -3,19 +3,10 @@
 		if(!isset($_SESSION["usu_id"])) {
 			header("location:../index.php?nolog=2");
 		}
-		//realizamos la conexión
-		$conexion = mysqli_connect('localhost', 'root', '', 'bd_proyecto2');
-		//le decimos a la conexión que los datos los devuelva diréctamente en utf8, así no hay que usar htmlentities
-		$acentos = mysqli_query($conexion, "SET NAMES 'utf8'");
-		if (!$conexion) {
-		    echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
-		    echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
-		    echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
-		    exit;
-		}
+		//incluimos la funcionalidad de conexión de php
+		require_once('conexion.php');
 		extract($_REQUEST);
 		//session_start();
-		$mysqli = new mysqli("localhost", "root", "", "bd_proyecto2");
 		//Cogemos el nombre de usuario y la imagen de forma dinámica en la BD
 		$con =	"SELECT * FROM `tbl_usuario` WHERE `usu_id` = '". $_SESSION["usu_id"] ."'";
 		//echo $con;
@@ -89,6 +80,7 @@
 	<ul class="topnav">	
 		<li class="li"><a href="administrador_recursos.php">Administrar recursos</a></li>
 		<li class="li"><a href="#">Adiministrar reservas</a></li>
+		<li class="li"><a href="administrador_usuarios.php">Administrar usuarios</a></li>
 	</ul>
 </nav>
 <div class="container">
