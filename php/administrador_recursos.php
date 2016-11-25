@@ -35,15 +35,18 @@
 		}
 
 		if(isset($action)){
+			$url="http://".$_SERVER['HTTP_HOST']."/proyecto3/php/administrador_recursos.php";
 			switch ($action) {
 				case '1':
 					//echo $id;die;
 					$del_recu=pro3_disable_recu($id);
 					if($del_recu==true){
 						echo "El recurso ha sido eliminado correctamente";
+						echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 					}
 						else{
 							echo "no se ha podido eliminar correctamente";
+							echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 						}
 					
 					break;
@@ -52,19 +55,25 @@
 					if($upd_recu==true)
 					{
 						echo "El recurso ha sido modifcado correctamente";
+						echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 					}
 					else{
 						echo "el recurso no ha podido ser modificado";
+						echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 					}
+					break;
 				case '4':
 					$create_recu=pro3_create_recu($add_nombre,$add_descripcion,$add_estado,$add_imagen,$add_type);
 					if($create_recu==true)
 					{
 						echo "El recurso ha sido creado";
+						echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 					}
 					else{
 						echo "El recurso no ha sido creado";
+						echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 					}
+					break;
 				default:
 					# code...
 					break;
@@ -161,7 +170,7 @@
 	<br/><br/>
 		<h1>Añadir recurso </h1>
 			<div class="add_recu">
-			<form action='administrador_recursos.php?action=4' method= 'POST' class="form_add">
+			<form action='administrador_recursos.php?action=4' method= 'POST'>
 				<table border>
 					<tr>
 						<td colspan='3'>Nombre del recurso: <input type='textarea' name='add_nombre' ></td>							

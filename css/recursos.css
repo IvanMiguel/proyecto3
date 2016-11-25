@@ -110,9 +110,12 @@ nav ul.topnav li a:hover {background-color: #555; color: white;}
       margin-left: 33%;
 }
 .form_add{
-     background: #fff;
-     border-radius: 1px 0px 0px 0px;
+    background: #fff;
+    border-radius: 1px 0px 0px 0px;
+    margin-left: 18%;
+    margin-right: 18%;
 }
+
 /*Estilos de formulario*/
 .formtipo
 {

@@ -12,11 +12,33 @@
 		require_once('conexion.php');
 		$usuario = $_SESSION['usu_id'];
 			//$fecha_ini = date("Y-m-d H:i:s");
-			//Montamos las fechas de inicio y las fechas finales
-			$fecha_ini = $fecha_inicial. " " . $hora_inicial . ":00";
-			$fecha_fin = $fecha_final. " " . $hora_final . ":00";
-			//echo $fecha_ini . "Y fecha final: " . $fecha_fin;
-		$now = date("Y-m-d H:i:s");
+			//Montamos las fechas según lo necesita MySQL
+		//Si dia o mes son inferiores a 10 le añadimos el 0
+			if($dia_inicial<10)
+			{
+				$dia_inicial="0".$dia_inicial;
+			}
+			if($mes_inicial<10)
+			{
+				$mes_inicial="0".$mes_inicial;
+			}
+			if($dia_final<10)
+			{
+				$dia_inicial="0".$dia_final;
+			}
+			if($mes_final<10)
+			{
+				$mes_inicial="0".$mes_final;
+			}
+			//Montamos fecha inicial
+			$fecha_inicial=$ano_inicial."-".$mes_inicial."-".$dia_inicial;
+			$fecha_ini = $fecha_inicial. " " . $hora_inicial ;
+			//montamos la fecha final
+			$fecha_final=$ano_final."-".$mes_final."-".$dia_final;
+			$fecha_fin = $fecha_final. " " . $hora_final ;
+			//echo $fecha_fin;die;
+			//echo $fecha_ini . "Y fecha final: " . $fecha_fin;die;
+		$now = date("Y-m-d H:00:00");
 		//Seleccionamos todas las reservas del recurso que queremos reservar
 		$search_rec = "SELECT * FROM `tbl_recurso` LEFT JOIN `tbl_reserva` ON tbl_recurso.rec_id=tbl_reserva.res_recursoid WHERE tbl_recurso.`rec_id` = $rec_id";
 		$search_status = mysqli_query($conexion,$search_rec);
@@ -46,10 +68,15 @@
 		{
 			//Lo insertamos
 				$insertar_reserva = "INSERT INTO tbl_reserva (res_fechainicio, res_fechafinal, res_recursoid, res_usuarioid) VALUES ('$fecha_ini', '$fecha_fin', '$rec_id' , '$usuario')";
+				//echo $insertar_reserva;die;
 				$reservar_producto = mysqli_query($conexion, $insertar_reserva);
 				//Si la fecha inicial es la actual, o la fecha final es superior a la actual
-				if($fecha_ini==$now OR $fecha_fin>$now)
+				if($fecha_ini==$now)
 				{
+					$sql = "UPDATE tbl_recurso SET rec_estado='ocupado' WHERE rec_id='$rec_id'";
+					$reservar_producto = mysqli_query($conexion, $sql); 
+				}
+				else if($fecha_ini<$now AND $fecha_fin>$now){
 					$sql = "UPDATE tbl_recurso SET rec_estado='ocupado' WHERE rec_id='$rec_id'";
 					$reservar_producto = mysqli_query($conexion, $sql); 
 				}

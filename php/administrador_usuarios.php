@@ -18,12 +18,12 @@
 							if($deshab==true)
 							{
 								echo "Usuario deshabilitado correctamente";
-								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";
+								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 							}
 							else
 							{
 								echo "El usuario no ha sido deshabilitado";
-								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";
+								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 							}
 						break;//END case1
 					case '2':
@@ -31,12 +31,12 @@
 							if($hab==true)
 							{
 								echo "Usuario ha sido habilitado correctamente";
-								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";
+								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 							}
 							else
 							{
 								echo "El usuario no ha sido habilitado";
-								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";
+								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 							}
 							break;//END case2
 					case '3':
@@ -45,12 +45,12 @@
 						if($upd==true)
 							{
 								echo "Usuario ha sido actualizado correctamente";
-								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";
+								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 							}
 							else
 							{
 								echo "El usuario no ha sido actualizado";
-								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";
+								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 							}
 							break;//END case3
 					case '4':
@@ -59,12 +59,12 @@
 						if($add==true)
 							{
 								echo "Usuario ha sido actualizado correctamente";
-								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";
+								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 							}
 							else
 							{
 								echo "El usuario no ha sido actualizado";
-								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";
+								echo "<meta http-equiv='refresh' content='2;URL=".$url."'>";die;
 							}
 							break;//END case4
 					default:
@@ -144,7 +144,7 @@
 <div class="container">
 	<div class="anadir">
 		<h1> Añadir usuario </h1>
-		<form action="administrador_usuarios.php?action=4" method="POST">
+		<form action="administrador_usuarios.php?action=4" method="POST"  class="form_add">
 			<table border>
 				<tr>
 					<td>Nick: <input type='textarea' name='id'></td>
@@ -216,13 +216,13 @@
 												echo "<td>Estado: " .$print_user['usu_estado']. "</td>";
 												switch ($print_user['usu_estado']) {
 													case 'activo':
-														echo "<form action='administrador_usuarios.php?action=1&id=".$print_user['usu_id']."' method='POST'>";
+														echo "</form><form action='administrador_usuarios.php?action=1&id=".$print_user['usu_id']."' method='POST'>";
 															echo "<td colspan='2'><input type='submit' id='deshabilitar'value='Deshabilitar'></td>";
 														echo "</form>";
 														break;
 													
 													default:
-														echo "<form action='administrador_usuarios.php?action=2&id=".$print_user['usu_id']."' method='POST'>";
+														echo "</form><form action='administrador_usuarios.php?action=2&id=".$print_user['usu_id']."' method='POST'>";
 															echo "<td colspan='2'>
 																<input type='submit' id='habilitar' name='habilitar' value='Habilitar'>
 															</td>";

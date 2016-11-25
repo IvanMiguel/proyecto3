@@ -84,8 +84,9 @@
 				
 			
 			<?php
+				$now=date("Y-m-d H:m:s");
 				//Seleccionamos todas las reservas que tiene asignado nuestro usuario
-				$con 	=	"SELECT * FROM `tbl_reserva` WHERE `res_usuarioid` = " . $_SESSION["usu_id"] . " AND time(`res_fechafinal`)>= time(NOW())";
+				$con 	=	"SELECT * FROM `tbl_reserva` WHERE `res_usuarioid` = " . $_SESSION["usu_id"] . " AND `res_fechafinal`>= '".$now."'";
 				//echo $con;die;
 				$result 	=	mysqli_query($conexion,$con);
 

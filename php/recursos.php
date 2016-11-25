@@ -23,7 +23,21 @@
 		$ocupado =	" SELECT * FROM tbl_recurso INNER JOIN tbl_tiporecurso ON tbl_tiporecurso.tr_id = tbl_recurso.rec_tipoid WHERE rec_estado='ocupado' ";
 
 		extract($_REQUEST);
-
+		if(isset($com_res)){
+			$url="http://".$_SERVER['HTTP_HOST']."/proyecto3/php/recursos.php";
+			switch ($com_res) {
+				case '1':
+					echo "El rescurso estara ocupado a esa hora";
+					echo "<META HTTP-EQUIV='REFRESH' CONTENT='5';URL='".$url."'>";die;
+					break;
+				case '2':
+				echo "Reserva realizada";
+					echo "<META HTTP-EQUIV='REFRESH' CONTENT='5';URL='".$url."'>";die;
+				default:
+					# code...
+					break;
+			}
+		}
 		if(isset($enviar)){
 		 	if($tr_id>0){
 		 		$disponible .= " AND rec_tipoid='$tr_id '";
@@ -151,13 +165,56 @@
 									echo "<form id='reserved' class='reservedf' action=recursos.proc.php?rec_id=".$recurso['rec_id']." method='POST' >";
 										echo "<table border>";
 											echo "<tr><td>Fecha inicial de la reserva</td>";
-											echo "<td> <input type='date' id='fecha_inicial' name='fecha_inicial' maxlength='15'></td></tr>";
+											//echo "<td> <input type='date' id='fecha_inicial' name='fecha_inicial' maxlength='15'></td></tr>";
+											echo "<td>dia<select name='dia_inicial'>";
+												for($i=01;$i<=31;$i++){
+													echo "<option value='".$i."'>".$i."</option>";
+												}
+
+												echo "</select>mes<select name='mes_inicial'>";
+												for($i=01;$i<=12;$i++){
+													echo "<option value='".$i."'>".$i."</option>";
+												}
+												echo "</select>año<select name='ano_inicial'>";
+												for($i=2016;$i<=2099;$i++){
+													echo "<option value='".$i."'>".$i."</option>";
+												}
+											echo "</select>";
+											/*echo "<td><select name='fecha_inicial'>";
+												for($i=1;$i>=31;$i++){
+													echo "<option value"
+												}*/
 											echo "<tr><td>Seleccione hora inicial</td>";
-											echo "<td> <input type='time' name='hora_inicial' id='hora_inicial'></td>";
+											//echo "<td> <input type='time' name='hora_inicial' id='hora_inicial'></td>";
+											echo "<td><select name='hora_inicial'>";
+												for($i=0;$i<=24;$i++)
+												{
+													echo "<option value='".$i.":00:00'>".$i.":00</option>";
+												}
+											echo "</select></td>";
 											echo "<tr><td>Fecha final de la reserva</td>";
-											echo "<td> <input type='date' id='fecha_final' name='fecha_final' maxlength='15'></td></tr>";
+											//echo "<td> <input type='date' id='fecha_final' name='fecha_final' maxlength='15'></td></tr>";
+											echo "<td>dia<select name='dia_final'>";
+												for($i=01;$i<=31;$i++){
+													echo "<option value='".$i."'>".$i."</option>";
+												}
+
+												echo "</select>mes<select name='mes_final'>";
+												for($i=01;$i<=12;$i++){
+													echo "<option value='".$i."'>".$i."</option>";
+												}
+												echo "</select>año<select name='ano_final'>";
+												for($i=2016;$i<=2099;$i++){
+													echo "<option value='".$i."'>".$i."</option>";
+												}
+											echo "</select>";
 											echo "<tr><td>Seleccione hora final</td>";
-											echo "<td> <input type='time' name='hora_final' id='hora_final'></td>";
+											//echo "<td> <input type='time' name='hora_final' id='hora_final'></td>";
+											echo "<td><select name='hora_final'>";
+												for($i=0;$i<=24;$i++)
+												{
+													echo "<option value='".$i.":00:00'>".$i.":00</option>";
+												}
 											echo "<tr><td colspan='2'> <input type='submit' onclick='return rvalidar()' value='reservar'>";
 										echo "</table></form>";
 									echo "</div>";

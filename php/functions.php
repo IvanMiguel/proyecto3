@@ -116,6 +116,7 @@
 		$conexion=pro3_conexion();
 
 		$enable_con="UPDATE `tbl_usuario` SET `usu_estado` = 'activo' WHERE `tbl_usuario`.`usu_id` = $id";
+		echo $enable_con;
 		mysqli_query($conexion,$enable_con);
 		if(mysqli_affected_rows($conexion)==1){
 			return true;
