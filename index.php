@@ -61,6 +61,16 @@
 						</p>
 					</div>
 				<?php
+				case '3':
+				?>
+				<div class="login_failed">
+						<p class="user_failed">
+							¡Usuario deshabilitado! 
+							<br/>
+							¡Contacte con un administrador!
+						</p>
+					</div>
+				<?php
 				default:
 					//En caso que el usuario envie cualquier variable por URL, que salga del Switch sin que haga nada
 					break;

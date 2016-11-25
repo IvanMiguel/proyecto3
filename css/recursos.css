@@ -105,6 +105,14 @@ nav ul.topnav li a:hover {background-color: #555; color: white;}
     margin-left: 81%;
     margin-top: -3%;
 }
+/*Apartado añadir recursos*/
+.add_recu{
+      margin-left: 33%;
+}
+.form_add{
+     background: #fff;
+     border-radius: 1px 0px 0px 0px;
+}
 /*Estilos de formulario*/
 .formtipo
 {
@@ -135,5 +143,6 @@ input{
 /*Estilos formularios de modificación de usuarios*/
 .div_up-form {
     display: block;
-    margin-left: 19%;
+    margin-left: 32%;
 }
+

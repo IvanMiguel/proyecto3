@@ -4,7 +4,9 @@
 			header("location:../index.php?nolog=2");
 		}
 		//realizamos la conexión
-		require_once('conexion.php');
+		//require_once('conexion.php');
+		require_once('functions.php');
+		$conexion=pro3_conexion();
 		//session_start();
 		//Cogemos el nombre de usuario y la imagen de forma dinámica en la BD
 		$con =	"SELECT * FROM `tbl_usuario` WHERE `usu_id` = '". $_SESSION["usu_id"] ."'";
@@ -16,16 +18,12 @@
 				$usu_nickname	=	$fila[1];
 				$usu_img	=	$fila[6];
 			}
-			
-
-
 		$sql = "SELECT * FROM tbl_tiporecurso ORDER BY tr_id";
 
 		$disponible =	" SELECT * FROM tbl_recurso INNER JOIN tbl_tiporecurso ON tbl_tiporecurso.tr_id = tbl_recurso.rec_tipoid WHERE rec_estado='disponible' ";
 
 		$ocupado =	" SELECT * FROM tbl_recurso INNER JOIN tbl_tiporecurso ON tbl_tiporecurso.tr_id = tbl_recurso.rec_tipoid WHERE rec_estado='ocupado' ";
 		$incidencia = " SELECT * FROM tbl_recurso INNER JOIN tbl_tiporecurso ON tbl_tiporecurso.tr_id = tbl_recurso.rec_tipoid INNER JOIN tbl_incidencia ON tbl_incidencia.inc_recursoid = tbl_recurso.rec_id INNER JOIN tbl_tipoinc ON tbl_incidencia.inc_tipinc = tbl_tipoinc.ti_id WHERE rec_estado='incidencia'";
-
 		extract($_REQUEST);
 
 		if(isset($enviar)){
@@ -34,6 +32,43 @@
 		 		$ocupado .= " AND rec_tipoid='$tr_id' ";
 		 		$incidencia .=" AND rec_tipoid= '$tr_id'";
 		 	}
+		}
+
+		if(isset($action)){
+			switch ($action) {
+				case '1':
+					//echo $id;die;
+					$del_recu=pro3_disable_recu($id);
+					if($del_recu==true){
+						echo "El recurso ha sido eliminado correctamente";
+					}
+						else{
+							echo "no se ha podido eliminar correctamente";
+						}
+					
+					break;
+				case'3':
+					$upd_recu=pro3_update_recu($id,$new_nombre,$new_descripcion,$new_estado,$new_imagen,$new_type);
+					if($upd_recu==true)
+					{
+						echo "El recurso ha sido modifcado correctamente";
+					}
+					else{
+						echo "el recurso no ha podido ser modificado";
+					}
+				case '4':
+					$create_recu=pro3_create_recu($add_nombre,$add_descripcion,$add_estado,$add_imagen,$add_type);
+					if($create_recu==true)
+					{
+						echo "El recurso ha sido creado";
+					}
+					else{
+						echo "El recurso no ha sido creado";
+					}
+				default:
+					# code...
+					break;
+			}
 		}
 		//echo $incidencia;die;
 		$tipos = mysqli_query($conexion, $sql);
@@ -49,8 +84,19 @@
 	<link rel="stylesheet" type="text/css" href="../css/recursos.css">
 	<title>Recursos</title>
 	<script type="text/javascript">
+
+		function del()
+		{
+			var respuesta = confirm("¿Está seguro que desea eliminar el recurso y todas sus reservas activas?");
+			if(respuesta){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
 		function destroy(){
-			var respuesta = confirm("¿Está seguro que desea liberar la incidencia?");
+			var respuesta = confirm("¿Está seguro que desea liberaresta incidencia?");
 			if(respuesta){
 				return true;
 			}
@@ -59,9 +105,6 @@
 			}
 			
 		}
-
-		</script>
-	<script type="text/javascript">
 		function logout()
 		{
 			var login_respuesta = confirm("¿Está seguro que desea cerrar la sesión?");
@@ -116,6 +159,27 @@
 		<input type="submit" name="enviar" value="Filtrar">
 	</form>
 	<br/><br/>
+		<h1>Añadir recurso </h1>
+			<div class="add_recu">
+			<form action='administrador_recursos.php?action=4' method= 'POST' class="form_add">
+				<table border>
+					<tr>
+						<td colspan='3'>Nombre del recurso: <input type='textarea' name='add_nombre' ></td>							
+					</tr>
+					<tr>
+						<td colspan='2'>Descripcion: <input type='textarea' name='add_descripcion' ></td>
+						<td>Estado: <input type='textarea' name='add_estado' ></td>
+					</tr>
+					<tr>
+						<td colspan='2'>Imagen del recurso: <input type='textarea' name='add_imagen'></td>
+						<td>Nuevo tipo: <input type='textarea' name='add_type'></td>
+					</tr>
+					<tr>
+						<td colspan='3'><input type='submit' value="Añadir"></td>	
+					</tr>
+				</table>
+			</form>
+		</div>
 	<h1>Recursos Disponibles</h1>
 	<br/>
 	<?php
@@ -127,18 +191,45 @@
 										//echo $fila[0]
 									echo "<table border>";
 										echo "<tr>";
-											echo "<td colspan='2'>" . $recurso['rec_nombre'] . "</td>";
+											echo "<td colspan='3'>" . $recurso['rec_nombre'] . "</td>";
 										echo "</tr>";
 										echo "<tr>";
-											echo "<td rowspan='3'><img class='img_recu' src='../img/recursos/".$recurso['rec_foto']."' width='100'></td>";
-											echo "<td>".$recurso['rec_descripcion']."</td>";
+											echo "<td rowspan='4'><img class='img_recu' src='../img/recursos/".$recurso['rec_foto']."' width='100'></td>";
+											echo "<td colspan='2'>".$recurso['rec_descripcion']."</td>";
 										echo "</tr>";
 										echo "<tr>";
-											echo "<td>Estado: " .$recurso['rec_estado']. "</td>";
+											echo "<td colspan='2'>Estado: " .$recurso['rec_estado']. "</td>";
 										echo "</tr>";
-											
-														
+										echo "<tr>";
+											echo "<td><button onclick=\"document.getElementById('div_up-form".$recurso['rec_id']."').style.display='block';\"> Modificar recurso</button></td>";
+											echo "<td><button onclick=\"document.getElementById('div_up-form".$recurso['rec_id']."').style.display='none';\"> [X]</button></td>";
+										echo "</tr>";
+											echo "<form action='administrador_recursos.php?action=1&id=".$recurso['rec_id']."' method='POST' onclick='return del();'>";
+													echo "<td colspan='2'><input type='submit' id='eliminar' value='eliminar'></td>";
+											echo "</form>";
+										echo "</tr>";
 									echo "</table>";
+									echo "</div>";
+									echo "<div id='div_up-form".$recurso['rec_id']."' class='div_up-form'style='display: none;'>";
+										echo "<form action='administrador_recursos.php?action=3&id=".$recurso['rec_id']."' method='POST'>";
+											echo "<table border>";
+											echo "<tr>";
+												echo"<td colspan='3'>Nombre del recurso: <input type='textarea'name='new_nombre' value=".$recurso['rec_nombre']."></td>";
+												
+											echo "</tr>";
+											echo "<tr>";
+												echo"<td colspan='2'>Descripcion: <input type='textarea' name='new_descripcion' value=".$recurso['rec_descripcion']."></td>";
+												echo"<td>Estado: <input type='textarea' name='new_estado' value=".$recurso['rec_estado']."></td>";
+											echo "</tr>";
+											echo "<tr>";
+												echo"<td colspan='2'>Imagen del recurso: <input type='textarea'name='new_imagen' value=".$recurso['rec_foto']."></td>";	
+												echo "<td>Nuevo tipo: <input type='textarea' name='new_type' value=".$recurso['rec_tipoid']."></td>";
+											echo "</tr>";
+											echo "<tr>";
+												echo"<td colspan='3'>Imagen del recurso: <input type='submit' value=Modificar recurso></td>";	
+											echo "</tr>";
+											echo "</table>";
+										echo "</form>";
 									echo "</div>";
 									echo "</br>";
 	 

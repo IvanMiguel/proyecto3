@@ -1,7 +1,8 @@
 <?php
 extract($_POST);
 //Incluimos la funcionalidad que nos realiza la conexión con la bd
-require_once('conexion.php');
+require_once('functions.php');
+$conexion=pro3_conexion();
 //Consulta de busqueda del usuario
 	$con =	"SELECT * FROM `tbl_usuario` WHERE `usu_nickname` = '". $name ."' AND `usu_contrasena` = '" . $pass . "'";	
 	//Lanzamos la consulta a la BD
@@ -16,12 +17,22 @@ require_once('conexion.php');
 		{
 			//Asignamos la variable de session "usu_id" al ID del usuario
 			$_SESSION['usu_id']	=	$fila[0];
+			$tipo=$fila[3];
+			$_SESSION['user_type']	=	$tipo;
 			//Redireccionamos
-			if ($_SESSION['usu_id']!=5) {
-			header("location:recursos.php");	
-			}else{
-			header("location:administrador_recursos.php");
+			$stat=pro3_stat_user($_SESSION['usu_id']);
+			//echo $stat;die;
+			if($stat==true){
+				if ($tipo==1) {
+				header("location:recursos.php");	
+				}else{
+				header("location:administrador_recursos.php");
+				}
 			}
+			else{
+				header("location: ../index.php?nolog=3");
+			}
+			
 		}
 	}
 	//Si no nos devuelve registros significa que el usuario o contraseña han sido incorrectos.
